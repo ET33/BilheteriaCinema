@@ -38,5 +38,19 @@ namespace BilheteriaCinema.Controller
 
             return Ok();
         }
+
+        // POST: api/Sessao
+        [HttpPost]
+        [ProducesResponseType(typeof(SessaoDTO),StatusCodes.Status200OK)]
+        public async Task<IActionResult> Post([FromBody] SessaoDTO sessao)
+        {
+            sessao = await _sessaoApplication.CadastrarSessao(sessao);
+
+            if (sessao == null) {
+                return BadRequest("Sessao já existe");
+            }
+
+            return Ok(sessao);
+        }
     }
 }

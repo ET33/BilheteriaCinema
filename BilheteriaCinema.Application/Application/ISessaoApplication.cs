@@ -9,5 +9,6 @@ namespace BilheteriaCinema.Application.Application
     {
         Task<List<SessaoDTO>> BuscarSessoes(DateTime? inicio, DateTime? fim, int? sala, int? filme);
         Task CancelarSessao(int codigo);
+        Task<SessaoDTO> CadastrarSessao(SessaoDTO sessao);
     }
 }

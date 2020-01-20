@@ -19,6 +19,30 @@ namespace BilheteriaCinema.Application.Application
         }
 
      
+        public async Task<List<IngressoDTO>> BuscarIngressos(DateTime? dataInicio, DateTime? dataFim, string cpf, int? sessao)
+        {
+            var models = await _ingressoRepository.BuscarIngressos(dataInicio, dataFim, cpf, sessao);
+            
+            var dtos = new List<IngressoDTO>();
+
+            foreach (var model in models)
+            {
+                var dto = new IngressoDTO
+                {
+                    Codigo = model.Codigo,
+                    CPF = model.CPF,
+                    DataCompra = model.DataCompra,
+                    ValorPago = model.ValorPago,
+                    Observacao = model.Observacao,
+                    CodigoSessao = model.CodigoSessao
+                };
+
+                dtos.Add(dto);
+            }
+            
+            return dtos;
+        }
+     
         public async Task<IngressoDTO> BuscarIngresso(int codigo)
         {
             var model = await _ingressoRepository.BuscarIngresso(codigo);

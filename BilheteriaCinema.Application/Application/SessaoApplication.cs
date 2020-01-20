@@ -51,5 +51,40 @@ namespace BilheteriaCinema.Application.Application
         {
             await _sessaoRepository.DeletarSessao(codigo);
         }
+
+        public async Task<SessaoDTO> CadastrarSessao(SessaoDTO dto) {
+            var model = new SessaoModel
+            {
+                Descricao = dto.Descricao,
+                Codigo = dto.Codigo,
+                Horario = dto.Horario,
+                Valor = dto.Valor,
+                CodigoSala = dto.CodigoSala,
+                CodigoFilme = dto.CodigoFilme
+            };
+
+            var filmeTask = await _filmeRepository.BuscarFilme(dto.CodigoFilme);
+            FilmeDTO filme = null;
+            if (filmeTask != null) {
+                filme = new FilmeDTO
+                {
+                    Nome = filmeTask.Nome,
+                    Codigo = filmeTask.Codigo,
+                    Duracao = filmeTask.Duracao,
+                    FaixaEtaria = filmeTask.FaixaEtaria,
+                    Genero = filmeTask.Genero
+                    
+                };
+            }
+            
+            if (_sessaoRepository.BuscarSessao(dto.Codigo) == null
+             || _sessaoRepository.BuscarSessoes(dto.Horario, dto.Horario + filme.Duracao, dto.CodigoSala, null) == null) {
+                model = await _sessaoRepository.CadastrarSessao(model);
+
+                return dto;
+            }
+
+            return null;
+        }
     }
 }

@@ -37,5 +37,13 @@ namespace BilheteriaCinema.Infra.EF.Repository
             _dbContext.Remove(sessao);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<SessaoModel> CadastrarSessao(SessaoModel sessao)
+        {
+            sessao = _dbContext.Sessoes.Add(sessao).Entity;
+            await _dbContext.SaveChangesAsync();
+
+            return sessao;
+        }
     }
 }
